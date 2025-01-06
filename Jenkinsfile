@@ -21,7 +21,7 @@ pipeline {
             }
         }
 
-        stage('Test'){
+        stage('Test') {
             agent {
                 docker {
                     image 'node:18-alpine'
@@ -31,13 +31,16 @@ pipeline {
 
             steps {
                 sh '''
-                    echo "Testing the application"
-                    ls -la
                     test -f build/index.html
-                    npm run test
+                    npm test
                 '''
             }
+        }
+    }
 
+    post {
+        always {
+            junit 'test-results/junit.xml'
         }
     }
 }
